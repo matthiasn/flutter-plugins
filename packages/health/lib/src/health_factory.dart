@@ -431,6 +431,21 @@ class HealthFactory {
     return stepsCount;
   }
 
+  Future<int?> getTotalFlightsClimbedInInterval(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    final args = <String, dynamic>{
+      'startDate': startDate.millisecondsSinceEpoch,
+      'endDate': endDate.millisecondsSinceEpoch
+    };
+    final flightsClimbed = await _channel.invokeMethod<int?>(
+      'getFlightsOfStairsInInterval',
+      args,
+    );
+    return flightsClimbed;
+  }
+
   int _alignValue(HealthDataType type) {
     switch (type) {
       case HealthDataType.SLEEP_IN_BED:

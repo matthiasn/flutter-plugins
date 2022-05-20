@@ -144,7 +144,12 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         else if (call.method.elementsEqual("getTotalStepsInInterval")){
             getTotalStepsInInterval(call: call, result: result)
         }
-        
+
+        /// Handle getFlightsOfStairsInInterval
+        else if (call.method.elementsEqual("getFlightsOfStairsInInterval")){
+            getFlightsOfStairsInInterval(call: call, result: result)
+        }
+
         /// Handle writeData
         else if (call.method.elementsEqual("writeData")){
             try! writeData(call: call, result: result)
@@ -598,7 +603,49 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         
         HKHealthStore().execute(query)
     }
-    
+
+     func getFlightsOfStairsInInterval(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let arguments = call.arguments as? NSDictionary
+        let startDate = (arguments?["startDate"] as? NSNumber) ?? 0
+        let endDate = (arguments?["endDate"] as? NSNumber) ?? 0
+
+        // Convert dates from milliseconds to Date()
+        let dateFrom = Date(timeIntervalSince1970: startDate.doubleValue / 1000)
+        let dateTo = Date(timeIntervalSince1970: endDate.doubleValue / 1000)
+
+        let sampleType = HKQuantityType.quantityType(forIdentifier: .flightsClimbed)!
+        let predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: .strictStartDate)
+
+        let query = HKStatisticsQuery(quantityType: sampleType,
+            quantitySamplePredicate: predicate,
+            options: .cumulativeSum) { query, queryResult, error in
+
+            guard let queryResult = queryResult else {
+                let error = error! as NSError
+                print("Error getting total flights of stairs in interval \(error.localizedDescription)")
+
+                DispatchQueue.main.async {
+                    result(nil)
+                }
+                return
+            }
+
+            var flightsClimbed = 0.0
+
+            if let quantity = queryResult.sumQuantity() {
+                let unit = HKUnit.count()
+                flightsClimbed = quantity.doubleValue(for: unit)
+            }
+
+            let totalFlightsClimbed = Int(flightsClimbed)
+            DispatchQueue.main.async {
+                result(totalFlightsClimbed)
+            }
+        }
+
+        HKHealthStore().execute(query)
+    }
+
     func unitLookUp(key: String) -> HKUnit {
         guard let unit = unitDict[key] else {
             return HKUnit.count()
