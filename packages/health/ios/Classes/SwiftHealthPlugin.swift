@@ -45,6 +45,10 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let MINDFULNESS = "MINDFULNESS"
     let SLEEP_IN_BED = "SLEEP_IN_BED"
     let SLEEP_ASLEEP = "SLEEP_ASLEEP"
+    let SLEEP_ASLEEP_CORE = "SLEEP_ASLEEP_CORE"
+    let SLEEP_ASLEEP_DEEP = "SLEEP_ASLEEP_DEEP"
+    let SLEEP_ASLEEP_REM = "SLEEP_ASLEEP_REM"
+    let SLEEP_ASLEEP_UNSPECIFIED = "SLEEP_ASLEEP_UNSPECIFIED"
     let SLEEP_AWAKE = "SLEEP_AWAKE"
     let EXERCISE_TIME = "EXERCISE_TIME"
     let WORKOUT = "WORKOUT"
@@ -265,6 +269,18 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
                 if (dataTypeKey == self.SLEEP_AWAKE) {
                     samplesCategory = samplesCategory.filter { $0.value == 2 }
+                }
+                if (dataTypeKey == self.SLEEP_ASLEEP_CORE) {
+                    samplesCategory = samplesCategory.filter { $0.value == 3 }
+                }
+                if (dataTypeKey == self.SLEEP_ASLEEP_DEEP) {
+                    samplesCategory = samplesCategory.filter { $0.value == 4 }
+                }
+                if (dataTypeKey == self.SLEEP_ASLEEP_REM) {
+                    samplesCategory = samplesCategory.filter { $0.value == 5 }
+                }
+                if (dataTypeKey == self.SLEEP_ASLEEP_UNSPECIFIED) {
+                    samplesCategory = samplesCategory.filter { $0.value == 1 }
                 }
                 if (dataTypeKey == self.HEADACHE_UNSPECIFIED) {
                     samplesCategory = samplesCategory.filter { $0.value == 0 }
@@ -490,6 +506,10 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[MINDFULNESS] = HKSampleType.categoryType(forIdentifier: .mindfulSession)!
             dataTypesDict[SLEEP_IN_BED] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
             dataTypesDict[SLEEP_ASLEEP] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
+            dataTypesDict[SLEEP_ASLEEP_CORE] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
+            dataTypesDict[SLEEP_ASLEEP_DEEP] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
+            dataTypesDict[SLEEP_ASLEEP_REM] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
+            dataTypesDict[SLEEP_ASLEEP_UNSPECIFIED] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
             dataTypesDict[SLEEP_AWAKE] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
             dataTypesDict[EXERCISE_TIME] = HKSampleType.quantityType(forIdentifier: .appleExerciseTime)!
             dataTypesDict[WORKOUT] = HKSampleType.workoutType()
