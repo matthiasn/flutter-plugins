@@ -334,7 +334,7 @@ class HealthFactory {
     return unique;
   }
 
-  /// Get the total numbner of steps within a specific time period.
+  /// Get the total number of steps within a specific time period.
   /// Returns null if not successful.
   ///
   /// Is a fix according to https://stackoverflow.com/questions/29414386/step-count-retrieved-through-google-fit-api-does-not-match-step-count-displayed/29415091#29415091
@@ -351,6 +351,23 @@ class HealthFactory {
       args,
     );
     return stepsCount;
+  }
+
+  /// Get the total distance within a specific time period.
+  /// Returns null if not successful.
+  Future<int?> getTotalDistanceInInterval(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    final args = <String, dynamic>{
+      'startDate': startDate.millisecondsSinceEpoch,
+      'endDate': endDate.millisecondsSinceEpoch
+    };
+    final distance = await _channel.invokeMethod<int?>(
+      'getTotalDistanceInInterval',
+      args,
+    );
+    return distance;
   }
 
   Future<int?> getTotalFlightsClimbedInInterval(
