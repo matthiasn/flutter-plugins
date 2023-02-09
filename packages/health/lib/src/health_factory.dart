@@ -431,6 +431,23 @@ class HealthFactory {
     return stepsCount;
   }
 
+  /// Get the total distance within a specific time period.
+  /// Returns null if not successful.
+  Future<int?> getTotalDistanceInInterval(
+      DateTime startDate,
+      DateTime endDate,
+      ) async {
+    final args = <String, dynamic>{
+      'startDate': startDate.millisecondsSinceEpoch,
+      'endDate': endDate.millisecondsSinceEpoch
+    };
+    final distance = await _channel.invokeMethod<int?>(
+      'getTotalDistanceInInterval',
+      args,
+    );
+    return distance;
+  }
+
   Future<int?> getTotalFlightsClimbedInInterval(
     DateTime startDate,
     DateTime endDate,
